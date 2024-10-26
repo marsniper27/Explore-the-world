@@ -23,9 +23,13 @@ function searchLocation() {
             if (locations) {
                 for(const location of locations){
                     console.log('location',location)
-                    resultDiv.innerHTML += `<img src="${location.imageUrl}" alt="hjh">`;
-                    resultDiv.innerHTML += `<h2>${location.name}</h2>`;
-                    resultDiv.innerHTML += `<p>${location.description}</p>`;
+                    resultDiv.innerHTML += `<div class="location">
+                    <img src="${location.imageUrl}" alt="hjh">
+                    <div class="details">
+                    <h2>${location.name}</h2>
+                    <p>${location.description}</p>
+                    </div
+                    </div">`;
                 }
             } else {
                 resultDiv.innerHTML = 'Condition not found.';
@@ -37,25 +41,51 @@ function searchLocation() {
         });
     }
     else if(input.includes("temple")){
+        fetch('travel_recommendation_api.json')
+        .then(response => response.json())
+        .then(data => {
+            console.log('data',data)
+            const locations = data.temples;
+            console.log('locations',locations)
+
+            if (locations) {
+                for(const location of locations){
+                    console.log('location',location)
+                    resultDiv.innerHTML += `<div class="location">
+                    <img src="${location.imageUrl}" alt="hjh">
+                    <div class="details">
+                    <h2>${location.name}</h2>
+                    <p>${location.description}</p>
+                    </div
+                    </div">`;
+                }
+            } else {
+                resultDiv.innerHTML = 'Condition not found.';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            resultDiv.innerHTML = 'An error occurred while fetching data.';
+        });
         
     }
     else{
     fetch('travel_recommendation_api.json')
         .then(response => response.json())
         .then(data => {
-            const location = data.countries.find(item => item.name.toLowerCase() === input);
+            const locations = data.countries.find(item => item.name.toLowerCase() === input);
 
             if (location) {
-                const symptoms = condition.symptoms.join(', ');
-                const prevention = condition.prevention.join(', ');
-                const treatment = condition.treatment;
-
-                resultDiv.innerHTML += `<h2>${condition.name}</h2>`;
-                resultDiv.innerHTML += `<img src="${condition.imagesrc}" alt="hjh">`;
-
-                resultDiv.innerHTML += `<p><strong>Symptoms:</strong> ${symptoms}</p>`;
-                resultDiv.innerHTML += `<p><strong>Prevention:</strong> ${prevention}</p>`;
-                resultDiv.innerHTML += `<p><strong>Treatment:</strong> ${treatment}</p>`;
+                for(const location of locations.cities){
+                    console.log('location',location)
+                    resultDiv.innerHTML += `<div class="location">
+                    <img src="${location.imageUrl}" alt="hjh">
+                    <div class="details">
+                    <h2>${location.name}</h2>
+                    <p>${location.description}</p>
+                    </div
+                    </div">`;
+                }
             } else {
                 resultDiv.innerHTML = 'Condition not found.';
             }
